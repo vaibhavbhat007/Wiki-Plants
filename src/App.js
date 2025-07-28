@@ -2,6 +2,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { Search, Leaf, Heart, Info, X, LogOut, User } from 'lucide-react';
 import { plantsData } from './data/plants';
 import Auth from './components/Auth';
+import InstallPrompt from './components/InstallPrompt';
 
 function App() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -358,6 +359,8 @@ function App() {
           onClose={() => setSelectedPlant(null)} 
         />
       )}
+
+      <InstallPrompt />
     </div>
   );
 }
