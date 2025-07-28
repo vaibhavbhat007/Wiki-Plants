@@ -1,11 +1,23 @@
-import React, { useState, useMemo } from 'react';
-import { Search, Leaf, Heart, Info, X } from 'lucide-react';
+import React, { useState, useMemo, useEffect } from 'react';
+import { Search, Leaf, Heart, Info, X, LogOut, User } from 'lucide-react';
 import { plantsData } from './data/plants';
+import Auth from './components/Auth';
 
 function App() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedPlant, setSelectedPlant] = useState(null);
   const [favorites, setFavorites] = useState([]);
+  const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Check if user is already logged in
+    const savedUser = localStorage.getItem('plantWikiUser');
+    if (savedUser) {
+      setUser(JSON.parse(savedUser));
+    }
+    setIsLoading(false);
+  }, []);
 
   const filteredPlants = useMemo(() => {
     if (!searchTerm) return plantsData;
@@ -25,6 +37,36 @@ function App() {
         : [...prev, plantId]
     );
   };
+
+  const handleLogin = (userData) => {
+    setUser(userData);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('plantWikiUser');
+    setUser(null);
+    setFavorites([]);
+    setSearchTerm('');
+    setSelectedPlant(null);
+  };
+
+  if (isLoading) {
+    return (
+      <div style={{
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+      }}>
+        <div className="loading-spinner" style={{ width: '40px', height: '40px' }}></div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return <Auth onLogin={handleLogin} />;
+  }
 
   const PlantCard = ({ plant }) => (
     <div className="plant-card" onClick={() => setSelectedPlant(plant)}>
@@ -201,7 +243,42 @@ function App() {
     <div className="App">
       <header className="header">
         <div className="container">
-          <h1><Leaf style={{ display: 'inline', marginRight: '12px' }} />Plant Wiki</h1>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+            <div>
+              <h1><Leaf style={{ display: 'inline', marginRight: '12px' }} />Plant Wiki</h1>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'white' }}>
+                <User size={20} />
+                <span>Welcome, {user.name}!</span>
+              </div>
+              <button
+                onClick={handleLogout}
+                style={{
+                  background: 'rgba(255, 255, 255, 0.2)',
+                  border: '1px solid rgba(255, 255, 255, 0.3)',
+                  color: 'white',
+                  padding: '8px 16px',
+                  borderRadius: '8px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  fontSize: '14px',
+                  transition: 'all 0.2s ease'
+                }}
+                onMouseOver={(e) => {
+                  e.target.style.background = 'rgba(255, 255, 255, 0.3)';
+                }}
+                onMouseOut={(e) => {
+                  e.target.style.background = 'rgba(255, 255, 255, 0.2)';
+                }}
+              >
+                <LogOut size={16} />
+                Logout
+              </button>
+            </div>
+          </div>
           <p>Discover and learn about plants and their care specifications</p>
           
           <div className="stats">
