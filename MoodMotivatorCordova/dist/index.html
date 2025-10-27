@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, width=device-width, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <title>Mood Motivator</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#667eea">
+</head>
+
+<body>
+    <div class="app">
+        <div class="container">
+            <h1 class="title">Mood Motivator</h1>
+            <p class="subtitle">Share your mood and get inspired with a personalized motivational quote</p>
+            
+            <div class="mood-input">
+                <label for="mood">How are you feeling today?</label>
+                <input type="text" id="mood" placeholder="e.g., sad, happy, stressed, excited..." />
+            </div>
+
+            <button id="getQuoteBtn" class="get-quote-btn">
+                <span id="btnText">Get Motivated!</span>
+                <div id="loadingSpinner" class="loading" style="display: none;"></div>
+            </button>
+
+            <div id="error" class="error" style="display: none;"></div>
+
+            <div id="quoteContainer" class="quote-container" style="display: none;">
+                <p id="quoteText" class="quote-text"></p>
+                <p id="quoteAuthor" class="quote-author"></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="cordova.js"></script>
+    <script src="js/index.js"></script>
+</body>
+</html>
